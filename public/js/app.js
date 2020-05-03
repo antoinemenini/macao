@@ -29,9 +29,9 @@ $(function () {
         <div class="card-body">
           <div class="container">
             <div class="row">
-              <div class="col-sm-4">
+              <div class="col-sm-3">
                 <h5 class="card-title"><i style="font-size: 4em; color: grey;" class="fas fa-dice-`+ numberToString(casino) +`"></i></h5>
-                <h6 class="card-subtitle mb-2 text-muted">90 $ <br> 20 $ <br> 0 $</h6>
+                <h6 class="card-subtitle mb-2 text-muted" style="text-align: center;">`+ casinos[casino].bills +`</h6>
               </div>
               <div class="col-sm-8">
                 <p class="card-text">

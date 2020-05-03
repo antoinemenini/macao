@@ -1,6 +1,6 @@
 casinos = {
     1: {
-        bills: [10, 30],
+        bills: [90, 10],
         dices: {
             red: 0,
             blue: 0,
