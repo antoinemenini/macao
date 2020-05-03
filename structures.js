@@ -12,8 +12,6 @@ casinos = {
     }
 }
     
-
-
 players = {
     socketId: {
         name: "name",
