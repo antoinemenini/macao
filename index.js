@@ -92,6 +92,8 @@ var casinos = {
     },
 }
 
+var rolledDices;
+
 
 function nextPlayer() {
     var n_players = Object.keys(players).length;
@@ -134,6 +136,21 @@ function rollDices(nbr)
         res.push(v);
     }
     res.sort();
+    return res;
+}
+
+function dicesArrToObj(arr)
+{
+    res = {};
+    for(var i=0; i<arr.length; i++)
+    {
+        if (arr[i] in res)
+        {
+            res[arr[i]] += 1;
+        } else {
+            res[arr[i]] = 1;
+        }
+    }
     return res;
 }
 
@@ -181,7 +198,9 @@ io.on('connection', function (socket) {
         var na = "Player "+(n_players+1);
         players[socket.id] = {
             name: na,
-            color: playerColor
+            color: playerColor,
+            dicesLeft: 8,
+            total: 0
         };
         //console.log(socket.id);
         //console.log(players);
@@ -211,7 +230,32 @@ io.on('connection', function (socket) {
         gameStarted = true;
         nextPlayer();
         initCasinos();
-        io.emit('gameStarted', casinos, currentPlayerId);
+        io.emit('gameStarted', casinos);
+        io.emit('nextTurn', casinos, currentPlayerId);
+
+        var d = rollDices(8);
+        console.log(d);
+        console.log(dicesArrToObj(d));
+
+
+
+    });
+    socket.on('rollDices', function() {
+        if(socket.id == currentPlayerId)
+        {
+            rolledDices = dicesArrToObj(rollDices(players[currentPlayerId].dicesLeft));
+            io.emit('dicesRolled', rolledDices, currentPlayerId);
+        }
+    });
+    socket.on("placeDices", function(value) {
+        if(socket.id == currentPlayerId)
+        {
+            var dicesNbr = dicesRolled[value];
+            players[currentPlayerId].dicesLeft -= dicesNbr;
+            casinos[value].dices[players[currentPlayerId].color] += dicesNbr;
+            nextPlayer();
+            io.emit('nextTurn', casinos, currentPlayerId);
+        }
     });
 });
 

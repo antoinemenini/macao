@@ -16,7 +16,8 @@ players = {
     socketId: {
         name: "name",
         total: 10000,
-        dicesLeft: 2
+        dicesLeft: 2,
+        color: "red"
     }
 }
 
