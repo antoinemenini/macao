@@ -93,8 +93,7 @@ $(function () {
     }
   };
 
-  socket.on('playersUpdate', function(players){
-    m_players = players;
+  updatePlayers = function(players){
     $("#playersList").empty();
     for (var p in players) {
       var strv = "";
@@ -112,6 +111,11 @@ $(function () {
       $("#playersList").append(strv);
 
     }
+  }
+
+  socket.on('playersUpdate', function(players){
+    m_players = players;
+    updatePlayers(players);
   });
 
   $("#formName").submit(function(event){
@@ -129,9 +133,11 @@ $(function () {
     socket.emit('startGame');
   });
 
-  socket.on('nextTurn', function(casinos, currentPlayerId){
+  socket.on('nextTurn', function(casinos, currentPlayerId, players){
     m_casinos = casinos;
+    m_players = players;
     updateCasinos(casinos);
+    updatePlayers(players);
     $('#startRow').hide();
     $('.showAfterStart').show();
 
@@ -149,6 +155,10 @@ $(function () {
   $("#rollDice").click(function(event){
     socket.emit('rollDice');
   });
+
+  chooseDice = function(dice){
+    socket.emit('placeDice', dice);
+  }
   
   socket.on('diceRolled', function(rolledDice, currentPlayerId){
     $('#rollDice').hide();
@@ -156,7 +166,7 @@ $(function () {
     $("#rolledDice").empty();
     var strv = "";
     for (dice in rolledDice){
-      strv += `<a href="#">`;
+      strv += `<a href="#" onclick="chooseDice(${dice})">`;
       for (var i = 1; i <= rolledDice[dice]; i++) {
         strv += `<i style="font-size: 3em;" class="fas fa-dice-${numberToString(dice)} 
         mr-1 ${m_players[currentPlayerId].color}"></i>`;
@@ -165,6 +175,6 @@ $(function () {
     }
     $("#rolledDice").append(strv);
     $('#rolledDice').show();
-    // il faut faire socket.emit('placeDice', nbr);
   });
+  
 });

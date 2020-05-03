@@ -242,9 +242,10 @@ io.on('connection', function (socket) {
         }
     });
     socket.on("placeDice", function(value) {
+        console.log("Place dice "+value);
         if(socket.id == currentPlayerId)
-        {
-            var diceNbr = diceRolled[value];
+        {   
+            var diceNbr = rolledDice[value];
             players[currentPlayerId].diceLeft -= diceNbr;
             casinos[value].dice[players[currentPlayerId].color] += diceNbr;
             nextPlayer();
