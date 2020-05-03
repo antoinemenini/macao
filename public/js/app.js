@@ -121,7 +121,7 @@ $(function () {
       {
         strv +=" <a href=\"#nameModal\" data-toggle=\"modal\" data-target=\"#nameModal\"><i class=\"fas fa-edit text-secondary\"></i></a>";
       }
-      strv =+ "<br>";
+      strv += "<br>";
       for(var i=0; i<players[p].dicesLeft; i++)
       {
         strv += '<i style="font-size: 1em;" class="fas fa-dice-two mr-1 ' + players[p].color + '"></i>';
