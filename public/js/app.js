@@ -145,10 +145,7 @@ $(function () {
   socket.on('nextTurn', function(casinos, currentPlayerId){
     updateCasinos(casinos);
     $('#startRow').hide();
-    $('#casinosRow').show();
-    $('#title').show();
-    $('#diceRow').show();
-
+    $('.showAfterStart').show();
 
     // il faut faire socket.emit('rollDices');
   });
