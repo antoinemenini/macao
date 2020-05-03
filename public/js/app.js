@@ -89,15 +89,15 @@ $(function () {
       strv += `</h6>
               </div>
               <div class="col-sm-8">
-                <p class="card-text">`
+                <p class="card-text">`;
 
       for (color in casinos[casino].dices){
         for (var i = 1; i <= casinos[casino].dices[color]; i++) {
-          strv += `<i style="font-size: 1.5em;" class="fas fa-dice-one mr-1 ` + 
-            color + `"></i>`
+          strv += '<i style="font-size: 1.5em;" class="fas fa-dice-'+ numberToString(casino) + ' mr-1 '; 
+          strv += color + '"></i>';
         }
         if (casinos[casino].dices[color] > 0){
-          strv += `<br>`
+          strv += `<br>`;
         }
       }
 
@@ -120,6 +120,11 @@ $(function () {
       if(p == socket.id)
       {
         strv +=" <a href=\"#nameModal\" data-toggle=\"modal\" data-target=\"#nameModal\"><i class=\"fas fa-edit text-secondary\"></i></a>";
+      }
+      strv += "<br>";
+      for(var i=0; i<players[p].dicesLeft; i++)
+      {
+        strv += '<i style="font-size: 1em;" class="fas fa-dice-two mr-1 ' + players[p].color + '"></i>';
       }
       strv += "</td></tr>";
       $("#playersList").append(strv);
