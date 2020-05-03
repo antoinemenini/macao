@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!-- https://getbootstrap.com/docs/4.1/examples/dashboard/ -->
+<html>
+<head>
+  <title>Play Macao</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="all.min.css">
+  <style type="text/css">
+    .red{
+      color: #dc3545;
+    }
+    .blue{
+      color: #007bff;
+    }
+    .yellow{
+      color: #ffc107;
+    }
+    .green{
+      color: #28a745;
+    }
+    .black{
+      color: #000000;
+    }
+  </style>
+
+</head>
+<body>
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <form id="formName">
+          <div class="form-group">
+            <label for="inputName">What is your name?</label>
+            <input type="text" class="form-control" id="inputName">
+          </div>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-dice"></i> Submit</button>
+        </form>
+      </div>
+      <div class="col-sm">
+        <h1 id="playersName"></h1>
+      </div>
+      <div class="col-sm">
+        <div id="players">
+          <h3>Players</h3>
+          <i style="font-size: 3em;" class="fas fa-dice-one red"></i>
+          <i style="font-size: 3em;" class="fas fa-dice-two blue"></i>
+          <i style="font-size: 3em;" class="fas fa-dice-three green"></i>
+          <i style="font-size: 3em;" class="fas fa-dice-four yellow"></i>
+          <i style="font-size: 3em;" class="fas fa-dice-five black"></i>
+          <ul class="list-group" id="playersList">
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm">
+      </div> 
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+  <script src="jquery.min.js"></script>
+  <script src="popper.min.js"></script>
+  <script src="bootstrap.min.js"></script>
+  <script src="all.min.js"></script>
+  <script src="js.cookie.js"></script> <!-- https://github.com/js-cookie/js-cookie -->
+
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
