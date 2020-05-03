@@ -266,7 +266,7 @@ io.on('connection', function (socket) {
             nextPlayer();
             if(currentPlayerInt == -1)
             {
-                // we should end the turn here
+                io.emit('roundFinished', casinos, players);
             } else {
                 io.emit('nextTurn', casinos, currentPlayerId, players);
             }
