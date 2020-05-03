@@ -231,7 +231,7 @@ io.on('connection', function (socket) {
         nextPlayer();
         initCasinos();
         io.emit('gameStarted', casinos);
-        io.emit('nextTurn', casinos, currentPlayerId);
+        io.emit('nextTurn', casinos, currentPlayerId, players);
     });
     socket.on('rollDice', function() {
         if(socket.id == currentPlayerId)
@@ -248,7 +248,7 @@ io.on('connection', function (socket) {
             players[currentPlayerId].diceLeft -= diceNbr;
             casinos[value].dice[players[currentPlayerId].color] += diceNbr;
             nextPlayer();
-            io.emit('nextTurn', casinos, currentPlayerId);
+            io.emit('nextTurn', casinos, currentPlayerId, players);
         }
     });
 });
