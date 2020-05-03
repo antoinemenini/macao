@@ -9,7 +9,6 @@ $(function () {
 
   $("#formName").submit(function(event){
     event.preventDefault();
-    $("#playersName").text($("#inputName").val());
     socket.emit('setName', $("#inputName").val());
   });
 });
