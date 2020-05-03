@@ -157,8 +157,9 @@ $(function () {
 
     // il faut faire socket.emit('rollDices');
   });
+  
   socket.on('dicesRolled', function(rolledDices, currentPlayerId){
 
     // il faut faire socket.emit('placeDices', nbr);
-  };
+  });
 });
