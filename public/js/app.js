@@ -1,50 +1,3 @@
-casinoTest = {
-  1: {
-      bills: [90, 10],
-      dices: {
-          red: 2,
-          blue: 0,
-          yellow: 8,
-          green: 0,
-          black: 1
-      },
-      name: "table 1"
-  },
-  2: {
-    bills: [90, 10],
-    dices: {
-        red: 0,
-        blue: 4,
-        yellow: 4,
-        green: 4,
-        black: 4
-    },
-    name: "table 1"
-},
-3: {
-  bills: [90, 10],
-  dices: {
-      red: 2,
-      blue: 0,
-      yellow: 2,
-      green: 0,
-      black: 1
-  },
-  name: "table 1"
-},
-4: {
-  bills: [90, 10],
-  dices: {
-      red: 0,
-      blue: 3,
-      yellow: 0,
-      green: 5,
-      black: 1
-  },
-  name: "table 1"
-}
-}
-
 function numberToString(number) {
   switch(number) {
     case "1":
@@ -94,12 +47,12 @@ $(function () {
               <div class="col-sm-8">
                 <p class="card-text">`;
 
-      for (color in casinos[casino].dices){
-        for (var i = 1; i <= casinos[casino].dices[color]; i++) {
+      for (color in casinos[casino].dice){
+        for (var i = 1; i <= casinos[casino].dice[color]; i++) {
           strv += '<i style="font-size: 1.5em;" class="fas fa-dice-'+ numberToString(casino) + ' mr-1 '; 
           strv += color + '"></i>';
         }
-        if (casinos[casino].dices[color] > 0){
+        if (casinos[casino].dice[color] > 0){
           strv += `<br>`;
         }
       }
@@ -126,7 +79,7 @@ $(function () {
         strv +=" <a href=\"#nameModal\" data-toggle=\"modal\" data-target=\"#nameModal\"><i class=\"fas fa-edit text-secondary\"></i></a>";
       }
       strv += "<br>";
-      for(var i=0; i<players[p].dicesLeft; i++)
+      for(var i=0; i<players[p].diceLeft; i++)
       {
         strv += '<i style="font-size: 1em;" class="fas fa-dice-two mr-1 ' + players[p].color + '"></i>';
       }
@@ -159,22 +112,22 @@ $(function () {
     console.log(currentPlayerId)
     console.log(socket.id)
     $('#messageToWait').text(`Waiting for ${m_players[currentPlayerId].name} to play...`)
-    
+
     if (socket.id == currentPlayerId){
-      $('#rollDices').show();
+      $('#rollDice').show();
       $('#messageToWait').hide();
     } else {
-      $('#rollDices').hide();
+      $('#rollDice').hide();
       $('#messageToWait').show();
     }
   });
 
-  $("#rollDices").click(function(event){
-    socket.emit('rollDices');
+  $("#rollDice").click(function(event){
+    socket.emit('rollDice');
   });
   
-  socket.on('dicesRolled', function(rolledDices, currentPlayerId){
+  socket.on('diceRolled', function(rolledDice, currentPlayerId){
 
-    // il faut faire socket.emit('placeDices', nbr);
+    // il faut faire socket.emit('placeDice', nbr);
   });
 });
