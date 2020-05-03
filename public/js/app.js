@@ -134,8 +134,7 @@ $(function () {
     updateCasinos(casinos);
     $('#startRow').hide();
     $('.showAfterStart').show();
-    console.log(currentPlayerId)
-    console.log(socket.id)
+
     $('#messageToWait').text(`Waiting for ${m_players[currentPlayerId].name} to play...`)
 
     if (socket.id == currentPlayerId){
@@ -152,7 +151,20 @@ $(function () {
   });
   
   socket.on('diceRolled', function(rolledDice, currentPlayerId){
+    $('#rollDice').hide();
 
+    $("#rolledDice").empty();
+    var strv = "";
+    for (dice in rolledDice){
+      strv += `<a href="#">`;
+      for (var i = 1; i <= rolledDice[dice]; i++) {
+        strv += `<i style="font-size: 3em;" class="fas fa-dice-${numberToString(dice)} 
+        mr-1 ${m_players[currentPlayerId].color}"></i>`;
+      }
+      strv += `</a><span class="mr-4"></span>`;
+    }
+    $("#rolledDice").append(strv);
+    $('#rolledDice').show();
     // il faut faire socket.emit('placeDice', nbr);
   });
 });
