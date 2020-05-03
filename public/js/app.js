@@ -142,6 +142,7 @@ $(function () {
     $('.showAfterStart').show();
 
     $('#messageToWait').text(`Waiting for ${m_players[currentPlayerId].name} to play...`)
+    $('#rolledDice').hide();
 
     if (socket.id == currentPlayerId){
       $('#rollDice').show();
@@ -162,6 +163,7 @@ $(function () {
   
   socket.on('diceRolled', function(rolledDice, currentPlayerId){
     $('#rollDice').hide();
+    $('#messageToWait').hide();
 
     $("#rolledDice").empty();
     var strv = "";
