@@ -105,7 +105,7 @@ $(function () {
       strv += "<br>";
       for(var i=0; i<players[p].diceLeft; i++)
       {
-        strv += '<i style="font-size: 1em;" class="fas fa-dice-two mr-1 ' + players[p].color + '"></i>';
+        strv += '<i style="font-size: 1.7em;" class="fas fa-dice-two mr-1 ' + players[p].color + '"></i>';
       }
       strv += "</td></tr>";
       $("#playersList").append(strv);
