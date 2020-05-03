@@ -34,13 +34,7 @@
     <div class="row">
       <div class="col-lg-10 col-sm-12">
         <div class="row">
-          <form id="formName">
-            <div class="form-group">
-              <label for="inputName">What is your name?</label>
-              <input type="text" class="form-control" id="inputName">
-            </div>
-            <button type="submit" class="btn btn-primary"><i class="fas fa-dice"></i> Submit</button>
-          </form>
+          <h2>Play</h2>
         </div>
         <div class="row">
 
@@ -48,31 +42,32 @@
             <div class="card-body">
               <div class="container">
                 <div class="row">
-                  <div class="col-sm">
-                    One of three columns
+                  <div class="col-sm-4">
+                    <h5 class="card-title"><i style="font-size: 4em; color: grey;" class="fas fa-dice-one"></i></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">90 $ <br> 20 $ <br> 0 $</h6>
                   </div>
-                  <div class="col-sm">
-                    One of three columns
-                  </div>
-                  <div class="col-sm">
-                    One of three columns
+                  <div class="col-sm-8">
+                    <p class="card-text">
+                      <i style="font-size: 1.5em;" class="fas fa-dice-one black"></i>
+                      <i style="font-size: 1.5em;" class="fas fa-dice-one black"></i>
+                      <i style="font-size: 1.5em;" class="fas fa-dice-one black"></i>
+                      <br>
+                      <i style="font-size: 1.5em;" class="fas fa-dice-one red"></i>                
+                      <br>
+                      <i style="font-size: 1.5em;" class="fas fa-dice-one green"></i>
+                      <i style="font-size: 1.5em;" class="fas fa-dice-one green"></i>
+                      <i style="font-size: 1.5em;" class="fas fa-dice-one green"></i>
+                      <i style="font-size: 1.5em;" class="fas fa-dice-one green"></i>
+                      <i style="font-size: 1.5em;" class="fas fa-dice-one green"></i>
+                      <i style="font-size: 1.5em;" class="fas fa-dice-one green"></i>
+                      <i style="font-size: 1.5em;" class="fas fa-dice-one green"></i>
+                      <i style="font-size: 1.5em;" class="fas fa-dice-one green"></i>
+                    </p>
                   </div>
                 </div>
               </div>
-              <h5 class="card-title"><i style="font-size: 4em; color: grey;" class="fas fa-dice-one"></i></h5>
-              <h6 class="card-subtitle mb-2 text-muted">90 $ <br> 20 $ <br> 0 $</h6>
-              <p class="card-text">
-                <i style="font-size: 1.5em;" class="fas fa-dice-one black"></i>
-                <i style="font-size: 1.5em;" class="fas fa-dice-one black"></i>
-                <i style="font-size: 1.5em;" class="fas fa-dice-one black"></i>
-                <br>
-                <i style="font-size: 1.5em;" class="fas fa-dice-one red"></i>                
-                <br>
-                <i style="font-size: 1.5em;" class="fas fa-dice-one green"></i>
-                <i style="font-size: 1.5em;" class="fas fa-dice-one green"></i>
-                <i style="font-size: 1.5em;" class="fas fa-dice-one green"></i>
-                <i style="font-size: 1.5em;" class="fas fa-dice-one green"></i>
-              </p>
+              
+              
             </div>
           </div>
 
@@ -132,13 +127,9 @@
       <div class="col-lg-2 col-sm-12">
         <div id="players">
           <h3>Players</h3>
-          <i style="font-size: 3em;" class="fas fa-dice-one red"></i>
-          <i style="font-size: 3em;" class="fas fa-dice-two blue"></i>
-          <i style="font-size: 3em;" class="fas fa-dice-three green"></i>
-          <i style="font-size: 3em;" class="fas fa-dice-four yellow"></i>
-          <i style="font-size: 3em;" class="fas fa-dice-five black"></i>
-          <ul class="list-group" id="playersList">
-          </ul>
+
+          <table class="table" id="playersList">
+          </table>
         </div>
       </div>
     </div>      
@@ -146,7 +137,33 @@
   </div>
 
 
-
+  <div class="modal fade" id="nameModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form id="formName">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">     
+            <div class="form-group row">
+              <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputName">
+              </div>
+            </div>
+                
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 
 

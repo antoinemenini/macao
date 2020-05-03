@@ -129,11 +129,15 @@ io.on('connection', function (socket) {
 
     if(n_players < 5)
     {
+        //console.log(socket.id);
+        //console.log(players);
         var na = "Player "+(n_players+1);
         players[socket.id] = {
             name: na,
             color: playerColor
         };
+        //console.log(socket.id);
+        //console.log(players);
 
         io.emit('playersUpdate', players);
         socket.emit('casinosUpdate', casinos);
