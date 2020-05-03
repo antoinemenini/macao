@@ -17,6 +17,31 @@ function numberToString(number) {
   }
 }
 
+function billClass(bill) {
+  switch(bill) {
+    case 10:
+      return "secondary";
+    case 20:
+      return "secondary";
+    case 30:
+      return "secondary";
+    case 40:
+      return "secondary";
+    case 50:
+      return "info";
+    case 60:
+      return "success";
+    case 70:
+      return "primary";
+    case 80:
+      return "warning";
+    case 90:
+      return "danger";
+    default:
+      return "one";
+  }
+}
+
 $(function () {
   var socket = io();
 
@@ -39,7 +64,7 @@ $(function () {
 
 
       for (var bill in casinos[casino].bills){
-        strv += casinos[casino].bills[bill] + " $<br>";
+        strv += '<span class="badge badge-'+billClass(casinos[casino].bills[bill])+'">'+casinos[casino].bills[bill] + "$</span><br>";
       }
                 
       strv += `</h6>
