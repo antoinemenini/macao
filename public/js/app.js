@@ -20,4 +20,14 @@ $(function () {
     $('#nameModal').modal('hide');
     socket.emit('setName', $("#inputName").val());
   });
+
+  $("#startGameButton").click(function(event){
+    
+    socket.emit('startGame');
+  });
+
+  socket.on('gameStarted', function(casinos){
+    $('#startRow').hide();
+    $('#casinosRow').show();
+  });
 });

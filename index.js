@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
+var gameStarted = false;
 
 var players = {
 };
@@ -127,7 +128,7 @@ io.on('connection', function (socket) {
 
     var n_players = Object.keys(players).length;
 
-    if(n_players < 5)
+    if(n_players < 5 && !gameStarted)
     {
         //console.log(socket.id);
         //console.log(players);
@@ -156,6 +157,10 @@ io.on('connection', function (socket) {
         console.log("set name: "+name);
         players[socket.id].name = name;
         io.emit('playersUpdate', players);
+    });
+    socket.on('startGame', function() {
+        gameStarted = true;
+        io.emit('gameStarted', casinos);
     });
 });
 
