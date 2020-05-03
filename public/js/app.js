@@ -67,6 +67,9 @@ function numberToString(number) {
 $(function () {
   var socket = io();
 
+  var m_players;
+  var m_casinos;
+
   updateCasinos = function(casinos){
 
     $("#casinosRow").empty();
@@ -113,6 +116,7 @@ $(function () {
   };
 
   socket.on('playersUpdate', function(players){
+    m_players = players;
     $("#playersList").empty();
     for (var p in players) {
       var strv = "";
@@ -148,11 +152,25 @@ $(function () {
   });
 
   socket.on('nextTurn', function(casinos, currentPlayerId){
+    m_casinos = casinos;
     updateCasinos(casinos);
     $('#startRow').hide();
     $('.showAfterStart').show();
+    console.log(currentPlayerId)
+    console.log(socket.id)
+    $('#messageToWait').text(`Waiting for ${m_players[currentPlayerId].name} to play...`)
+    
+    if (socket.id == currentPlayerId){
+      $('#rollDices').show();
+      $('#messageToWait').hide();
+    } else {
+      $('#rollDices').hide();
+      $('#messageToWait').show();
+    }
+  });
 
-    // il faut faire socket.emit('rollDices');
+  $("#rollDices").click(function(event){
+    socket.emit('rollDices');
   });
   
   socket.on('dicesRolled', function(rolledDices, currentPlayerId){
