@@ -114,22 +114,20 @@ app.get('/', function (req, res) {
 io.on('connection', function (socket) {
     console.log('a new player connected');
 
-    var playerColor;
-
-
-    // pick the first available color
-    for(var c in colors) {
-        if(colors[c] == ""){
-            playerColor = c;
-            colors[c] = socket.id;
-            break;
-        }
-    }
+    var playerColor; 
 
     var n_players = Object.keys(players).length;
 
     if(n_players < 5 && !gameStarted)
     {
+        // pick the first available color
+        for(var c in colors) {
+            if(colors[c] == ""){
+                playerColor = c;
+                colors[c] = socket.id;
+                break;
+            }
+        }
         //console.log(socket.id);
         //console.log(players);
         var na = "Player "+(n_players+1);
@@ -147,7 +145,10 @@ io.on('connection', function (socket) {
     // when a player disconnects, remove them from our players object
     socket.on('disconnect', function (){
         console.log('user disconnected');
-        colors[players[socket.id].color] = "";
+        if (socket.id in players)
+        {
+            colors[players[socket.id].color] = "";
+        }
         // remove this player from our players object
         delete players[socket.id];
         // emit a message to all players to remove this player

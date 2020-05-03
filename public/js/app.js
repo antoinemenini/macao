@@ -21,13 +21,18 @@ $(function () {
     socket.emit('setName', $("#inputName").val());
   });
 
+  $("#formName2").submit(function(event){
+    event.preventDefault();
+    socket.emit('setName', $("#inputName2").val());
+  });
+
   $("#startGameButton").click(function(event){
-    
     socket.emit('startGame');
   });
 
   socket.on('gameStarted', function(casinos){
     $('#startRow').hide();
     $('#casinosRow').show();
+    $('#stopRow').show();
   });
 });
