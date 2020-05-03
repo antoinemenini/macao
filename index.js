@@ -99,8 +99,23 @@ function nextPlayer() {
     var n_players = Object.keys(players).length;
     currentPlayerInt = (currentPlayerInt + 1) % n_players;
     currentPlayerId = Object.keys(players)[currentPlayerInt];
-    console.log("Current player: "+currentPlayerInt);
-    console.log("Current player Id: "+currentPlayerId);
+    if(players[currentPlayerId].diceLeft == 0)
+    {
+        var turnFinished = true;
+        // check if there is at least some player that has a dice remaining
+        for(var p in players)
+        {
+            if(players[p].diceLeft > 0)
+                turnFinished = false;
+        }
+        if(turnFinished)
+        {
+            currentPlayerInt = -1;
+            currentPlayerId = 0;
+        } else {
+            nextPlayer();
+        }
+    }
 }
 
 function getRandomInt(max) {
@@ -249,7 +264,12 @@ io.on('connection', function (socket) {
             players[currentPlayerId].diceLeft -= diceNbr;
             casinos[value].dice[players[currentPlayerId].color] += diceNbr;
             nextPlayer();
-            io.emit('nextTurn', casinos, currentPlayerId, players);
+            if(currentPlayerInt == -1)
+            {
+                // we should end the turn here
+            } else {
+                io.emit('nextTurn', casinos, currentPlayerId, players);
+            }
         }
     });
 });
