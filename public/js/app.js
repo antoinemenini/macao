@@ -33,6 +33,6 @@ $(function () {
   socket.on('gameStarted', function(casinos){
     $('#startRow').hide();
     $('#casinosRow').show();
-    $('#stopRow').show();
+    $('#diceRow').show();
   });
 });

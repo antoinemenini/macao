@@ -20,74 +20,74 @@ var colors = {
     black: "",
 }
 
-var casinos = [
-    {
-        bills: [],
+var casinos = {
+    1: {
+        bills: [10, 30],
         dices: {
-            red: 0,
+            red: 4,
             blue: 0,
-            yellow: 0,
+            yellow: 2,
             green: 0,
             black: 0
         },
-        name: "casino 1"
+        name: "table 1"
     },
-    {
-        bills: [],
+    2: {
+        bills: [30],
         dices: {
-            red: 0,
+            red: 4,
             blue: 0,
-            yellow: 0,
+            yellow: 2,
+            green: 8,
+            black: 0
+        },
+        name: "table 1"
+    },
+    3: {
+        bills: [10, 30],
+        dices: {
+            red: 4,
+            blue: 0,
+            yellow: 2,
             green: 0,
             black: 0
         },
-        name: "casino 2"
+        name: "table 1"
     },
-    {
-        bills: [],
+    4: {
+        bills: [10, 30],
         dices: {
-            red: 0,
+            red: 4,
             blue: 0,
-            yellow: 0,
+            yellow: 2,
             green: 0,
             black: 0
         },
-        name: "casino 3"
+        name: "table 1"
     },
-    {
-        bills: [],
+    5: {
+        bills: [10, 30],
         dices: {
-            red: 0,
+            red: 4,
             blue: 0,
-            yellow: 0,
+            yellow: 2,
             green: 0,
             black: 0
         },
-        name: "casino 4"
+        name: "table 1"
     },
-    {
-        bills: [],
+    6: {
+        bills: [10, 30],
         dices: {
-            red: 0,
+            red: 4,
             blue: 0,
-            yellow: 0,
+            yellow: 2,
             green: 0,
             black: 0
         },
-        name: "casino 5"
+        name: "table 1"
     },
-    {
-        bills: [],
-        dices: {
-            red: 0,
-            blue: 0,
-            yellow: 0,
-            green: 0,
-            black: 0
-        },
-        name: "casino 6"
-    },
-]
+}
 
 
 app.set('view engine', 'ejs')
