@@ -125,6 +125,18 @@ function initCasinos(){
     }
 }
 
+function rollDices(nbr)
+{
+    var res = [];
+    for (var i = 0; i < nbr; i++)
+    {
+        var v = getRandomInt(6) + 1;
+        res.push(v);
+    }
+    res.sort();
+    return res;
+}
+
 
 app.set('view engine', 'ejs')
 
