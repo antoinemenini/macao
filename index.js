@@ -27,9 +27,9 @@ var casinos = {
     1: {
         bills: [],
         dices: {
-            red: 4,
+            red: 0,
             blue: 0,
-            yellow: 2,
+            yellow: 0,
             green: 0,
             black: 0
         },
@@ -38,10 +38,10 @@ var casinos = {
     2: {
         bills: [],
         dices: {
-            red: 4,
+            red: 0,
             blue: 0,
-            yellow: 2,
-            green: 8,
+            yellow: 0,
+            green: 0,
             black: 0
         },
         name: "table 1"
@@ -49,9 +49,9 @@ var casinos = {
     3: {
         bills: [],
         dices: {
-            red: 4,
+            red: 0,
             blue: 0,
-            yellow: 2,
+            yellow: 0,
             green: 0,
             black: 0
         },
@@ -60,9 +60,9 @@ var casinos = {
     4: {
         bills: [],
         dices: {
-            red: 4,
+            red: 0,
             blue: 0,
-            yellow: 2,
+            yellow: 0,
             green: 0,
             black: 0
         },
@@ -71,9 +71,9 @@ var casinos = {
     5: {
         bills: [],
         dices: {
-            red: 4,
+            red: 0,
             blue: 0,
-            yellow: 2,
+            yellow: 0,
             green: 0,
             black: 0
         },
@@ -82,9 +82,9 @@ var casinos = {
     6: {
         bills: [],
         dices: {
-            red: 4,
+            red: 0,
             blue: 0,
-            yellow: 2,
+            yellow: 0,
             green: 0,
             black: 0
         },
