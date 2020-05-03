@@ -142,11 +142,18 @@ $(function () {
     socket.emit('startGame');
   });
 
-  socket.on('gameStarted', function(casinos){
+  socket.on('nextTurn', function(casinos, currentPlayerId){
     updateCasinos(casinos);
     $('#startRow').hide();
     $('#casinosRow').show();
     $('#title').show();
     $('#diceRow').show();
+
+
+    // il faut faire socket.emit('rollDices');
   });
+  socket.on('dicesRolled', function(rolledDices, currentPlayerId){
+
+    // il faut faire socket.emit('placeDices', nbr);
+  };
 });
