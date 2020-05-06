@@ -7,7 +7,14 @@ const bodyParser = require('body-parser');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
-var gameStarted = false;
+
+var game = {
+    gameStarted: false,
+    currentPlayerInt: -1,
+    currentPlayerId: "",
+    rolledDice: {}
+}
+
 
 var players = {
 };
@@ -19,9 +26,6 @@ var colors = {
     green: "",
     black: "",
 };
-
-var currentPlayerInt = -1;
-var currentPlayerId = "";
 
 var casinos = {
     1: {
@@ -92,14 +96,11 @@ var casinos = {
     },
 }
 
-var rolledDice;
-
-
 function nextPlayer() {
     var n_players = Object.keys(players).length;
-    currentPlayerInt = (currentPlayerInt + 1) % n_players;
-    currentPlayerId = Object.keys(players)[currentPlayerInt];
-    if(players[currentPlayerId].diceLeft == 0)
+    game.currentPlayerInt = (game.currentPlayerInt + 1) % n_players;
+    game.currentPlayerId = Object.keys(players)[game.currentPlayerInt];
+    if(players[game.currentPlayerId].diceLeft == 0)
     {
         var turnFinished = true;
         // check if there is at least some player that has a dice remaining
@@ -110,19 +111,27 @@ function nextPlayer() {
         }
         if(turnFinished)
         {
-            currentPlayerInt = -1;
-            currentPlayerId = 0;
+            game.currentPlayerInt = -1;
+            game.currentPlayerId = 0;
         } else {
             nextPlayer();
         }
     }
 }
 
+function getScores() {
+    var scores = {};
+    for (var p in players) {
+        scores[p] = getRandomInt(100);
+    }
+    return scores;
+}
+
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-function initCasinos(){
+function initCasinos() {
     bills = [60, 60, 60, 60, 60, 70, 70, 70, 70, 70, 80, 80, 80, 80, 80, 90, 90, 90, 90, 90,
     10, 10, 10, 10, 10, 10, 40, 40, 40, 40, 40, 40, 50, 50, 50, 50, 50, 50,
     20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 30];
@@ -198,7 +207,7 @@ io.on('connection', function (socket) {
 
     var n_players = Object.keys(players).length;
 
-    if(n_players < 5 && !gameStarted)
+    if(n_players < 5 && !game.gameStarted)
     {
         // pick the first available color
         for(var c in colors) {
@@ -242,33 +251,34 @@ io.on('connection', function (socket) {
         io.emit('playersUpdate', players);
     });
     socket.on('startGame', function() {
-        gameStarted = true;
+        game.gameStarted = true;
         nextPlayer();
         initCasinos();
         io.emit('gameStarted', casinos);
-        io.emit('nextTurn', casinos, currentPlayerId, players);
+        io.emit('nextTurn', casinos, game.currentPlayerId, players);
     });
     socket.on('rollDice', function() {
-        if(socket.id == currentPlayerId)
+        if(socket.id == game.currentPlayerId)
         {
-            rolledDice = diceArrToObj(rollDice(players[currentPlayerId].diceLeft));
+            rolledDice = diceArrToObj(rollDice(players[game.currentPlayerId].diceLeft));
             console.log(rolledDice);
-            io.emit('diceRolled', rolledDice, currentPlayerId);
+            io.emit('diceRolled', rolledDice, game.currentPlayerId);
         }
     });
     socket.on("placeDice", function(value) {
         console.log("Place dice "+value);
-        if(socket.id == currentPlayerId)
+        if(socket.id == game.currentPlayerId)
         {   
             var diceNbr = rolledDice[value];
-            players[currentPlayerId].diceLeft -= diceNbr;
-            casinos[value].dice[players[currentPlayerId].color] += diceNbr;
+            players[game.currentPlayerId].diceLeft -= diceNbr;
+            casinos[value].dice[players[game.currentPlayerId].color] += diceNbr;
             nextPlayer();
-            if(currentPlayerInt == -1)
+            if(game.currentPlayerInt == -1)
             {
-                io.emit('roundFinished', casinos, players);
+                var scores = getScores();
+                io.emit('roundFinished', casinos, players, scores);
             } else {
-                io.emit('nextTurn', casinos, currentPlayerId, players);
+                io.emit('nextTurn', casinos, game.currentPlayerId, players);
             }
         }
     });

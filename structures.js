@@ -30,3 +30,8 @@ colors = {
 }
 
 rolledDice = { '1': 2, '2': 3, '4': 3 }
+
+scores = {
+    socketId: 123,
+    socketId: 10
+}
