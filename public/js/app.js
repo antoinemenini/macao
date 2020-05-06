@@ -97,16 +97,24 @@ $(function () {
     $("#playersList").empty();
     for (var p in players) {
       var strv = "";
+
+      // show the player's name
       strv += "<tr><td><i style=\"font-size: 1em;\" class=\"fas fa-user "+players[p].color+"\"></i> "+players[p].name;
+      // allow the player to change his name
       if(p == socket.id)
       {
         strv +=" <a href=\"#nameModal\" data-toggle=\"modal\" data-target=\"#nameModal\"><i class=\"fas fa-edit text-secondary\"></i></a>";
       }
       strv += "<br>";
+      // show the number of dice left
       for(var i=0; i<players[p].diceLeft; i++)
       {
         strv += '<i style="font-size: 1.7em;" class="fas fa-dice-two mr-1 ' + players[p].color + '"></i>';
       }
+      // show the total of points
+      let total = players[p].scores.reduce((a, b) => a + b, 0);
+      strv += `<br>Total score: ${total}$`;
+
       strv += "</td></tr>";
       $("#playersList").append(strv);
 
@@ -143,6 +151,7 @@ $(function () {
 
     $('#messageToWait').text(`Waiting for ${m_players[currentPlayerId].name} to play...`)
     $('#rolledDice').hide();
+    $('#roundOver').hide();
 
     if (socket.id == currentPlayerId){
       $('#rollDice').show();
@@ -166,6 +175,7 @@ $(function () {
     $('#rolledDice').hide();
     $('#messageToWait').hide();
     $('#rollDice').hide();
+    $('#roundOver').show();
   });
 
 
@@ -180,6 +190,7 @@ $(function () {
   socket.on('diceRolled', function(rolledDice, currentPlayerId){
     $('#rollDice').hide();
     $('#messageToWait').hide();
+    $('#roundOver').hide();
 
     $("#rolledDice").empty();
     var strv = "";
