@@ -118,14 +118,36 @@ $(function () {
       {
         strv += '<i style="font-size: 1.7em;" class="fas fa-dice-two mr-1 ' + players[p].color + '"></i>';
       }
-      // show the total of points
-      let total = players[p].scores.reduce((a, b) => a + b, 0);
-      strv += `<br>Total score: ${total}$`;
 
       strv += "</td></tr>";
       $("#playersList").append(strv);
 
     }
+  }
+
+  updateTableScores = function(players){
+
+    $("#tableScore").empty();
+    
+    var strv = `<tr>
+                  <th></th>`
+    for (var s in players[Object.keys(players)[0]].scores){
+    strv += `<th>Round ${+s + +1}</th>`
+    }
+    strv += `<th>Total</th>
+    </tr>`;
+
+    for (var p in players) {
+      strv += `<tr>
+               <td>${players[p].name}</td>`
+      for (var s in players[p].scores){
+        strv += `<td>${players[p].scores[s]}$</td>`
+      }
+      strv += `<td>${players[p].scores.reduce((a, b) => a + b, 0)}$</td>
+               </tr>`;
+    }
+
+    $("#tableScore").append(strv);
   }
 
   socket.on('playersUpdate', function(players){
@@ -161,6 +183,7 @@ $(function () {
     $('#messageToWait').text(`Waiting for ${m_players[currentPlayerId].name} to play...`)
     $('#rolledDice').hide();
     $('#roundOver').hide();
+    $("#tableScore").hide();
 
     if (socket.id == currentPlayerId){
       $('#rollDice').show();
@@ -171,29 +194,8 @@ $(function () {
     }
   });
 
-  socket.on('roundFinished', function(casinos, players){
-    m_casinos = casinos;
-    m_players = players;
-    
-    updateCasinos(casinos);
-    updatePlayers(players);
-
-    $('#startRow').hide();
-    $('.showAfterStart').show();
-
-    $('#rolledDice').hide();
-    $('#messageToWait').hide();
-    $('#rollDice').hide();
-    $('#roundOver').show();
-  });
-
-
   $("#rollDice").click(function(event){
     socket.emit('rollDice');
-  });
-
-  $("#startNextRound").click(function(event){
-    socket.emit('startNextRound');
   });
 
   chooseDice = function(dice){
@@ -219,5 +221,47 @@ $(function () {
 
     $('#rolledDice').show();
   });
+
+  socket.on('roundFinished', function(casinos, players){
+    m_casinos = casinos;
+    m_players = players;
+    
+    updateCasinos(casinos);
+    updatePlayers(players);
+    updateTableScores(players);
+
+    $('#startRow').hide();
+    $('.showAfterStart').show();
+
+    $('#rolledDice').hide();
+    $('#messageToWait').hide();
+    $('#rollDice').hide();
+    $('#roundOver').show();
+    $("#tableScore").show();
+  });
+
+  $("#startNextRound").click(function(event){
+    socket.emit('startNextRound');
+  });
   
+  socket.on('gameOver', function(casinos, players){
+    m_casinos = casinos;
+    m_players = players;
+    
+    updateCasinos(casinos);
+    updatePlayers(players);
+    updateTableScores(players);
+
+    $('#startRow').hide();
+    $('.showAfterStart').show();
+
+    $('#rolledDice').hide();
+    $('#messageToWait').hide();
+    $('#rollDice').hide();
+    $('#roundOver').hide();
+    $('#gameOver').show();
+    $("#tableScore").show();
+  });
+
+
 });
