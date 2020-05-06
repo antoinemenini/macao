@@ -120,11 +120,9 @@ function nextPlayer() {
 }
 
 function getScores() {
-    var scores = {};
     for (var p in players) {
-        scores[p] = getRandomInt(100);
+        players[p].scores.push(getRandomInt(100));
     }
-    return scores;
 }
 
 function getRandomInt(max) {
@@ -137,7 +135,6 @@ function initCasinos() {
     20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 30];
 
     for (var c in casinos) {
-        casinos[c]["bills"].push[10];
         var totalValue = 0;
         while(totalValue < 50)
         {
@@ -224,7 +221,7 @@ io.on('connection', function (socket) {
             name: na,
             color: playerColor,
             diceLeft: 8,
-            total: 0
+            scores: []
         };
         //console.log(socket.id);
         //console.log(players);
@@ -275,8 +272,8 @@ io.on('connection', function (socket) {
             nextPlayer();
             if(game.currentPlayerInt == -1)
             {
-                var scores = getScores();
-                io.emit('roundFinished', casinos, players, scores);
+                getScores();
+                io.emit('roundFinished', casinos, players);
             } else {
                 io.emit('nextTurn', casinos, game.currentPlayerId, players);
             }

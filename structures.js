@@ -15,7 +15,7 @@ casinos = {
 players = {
     socketId: {
         name: "name",
-        total: 10000,
+        scores: [10, 20],
         diceLeft: 2,
         color: "red"
     }
@@ -30,8 +30,3 @@ colors = {
 }
 
 rolledDice = { '1': 2, '2': 3, '4': 3 }
-
-scores = {
-    socketId: 123,
-    socketId: 10
-}
