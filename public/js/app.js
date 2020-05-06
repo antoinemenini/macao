@@ -48,6 +48,13 @@ $(function () {
   var m_players;
   var m_casinos;
 
+  var previousSocketId = Cookies.get('id');
+
+  if(previousSocketId != undefined && previousSocketId != socket.id)
+  {
+    socket.emit('registerNew', previousSocketId);
+  }
+
   updateCasinos = function(casinos){
 
     $("#casinosRow").empty();
@@ -142,6 +149,7 @@ $(function () {
   });
 
   socket.on('nextTurn', function(casinos, currentPlayerId, players, round){
+    Cookies.set('id', socket.id, { expires: 1 });
     m_casinos = casinos;
     m_players = players;
     updateCasinos(casinos);

@@ -204,6 +204,17 @@ function initRound() {
     game.currentPlayerInt = game.round % n_players;
 }
 
+function resetGame()
+{
+    for(var p in players)
+    {
+        players[p].scores = [];
+    }
+    initRound();
+    game.round = 0;
+    game.started = false;
+}
+
 function rollDice(nbr)
 {
     var res = [];
@@ -239,7 +250,7 @@ app.use(express.static('public'),
     express.static(__dirname + "/node_modules/jquery/dist/"),
     express.static(__dirname + "/node_modules/popper.js/dist/umd/"),
     express.static(__dirname + "/node_modules/bootstrap/dist/js/"),
-    express.static(__dirname + "/node_modules/node_modules/js-cookie/src/"),
+    express.static(__dirname + "/node_modules/js-cookie/src/"),
     express.static(__dirname + "/node_modules/@fortawesome/fontawesome-free/css/"),
     express.static(__dirname + "/node_modules/@fortawesome/fontawesome-free/js/"));
 
@@ -284,16 +295,21 @@ io.on('connection', function (socket) {
         socket.emit('casinosUpdate', casinos);
     }
 
-    // when a player disconnects, remove them from our players object
+    // when a player disconnects, remove them from our players object if the game has not started
     socket.on('disconnect', function (){
-        if (socket.id in players)
+        if(!game.gameStarted)
         {
-            colors[players[socket.id].color] = "";
+            if (socket.id in players)
+            {
+                colors[players[socket.id].color] = "";
+            }
+            // remove this player from our players object
+            delete players[socket.id];
+            // emit a message to all players to remove this player
+            io.emit('playersUpdate', players);
+        }  else {
+            console.log("a player has left while the game was started");
         }
-        // remove this player from our players object
-        delete players[socket.id];
-        // emit a message to all players to remove this player
-        io.emit('playersUpdate', players);
     });
     socket.on('setName', function(name) {
         players[socket.id].name = name;
@@ -308,18 +324,19 @@ io.on('connection', function (socket) {
     socket.on('rollDice', function() {
         if(socket.id == game.currentPlayerId)
         {
-            rolledDice = diceArrToObj(rollDice(players[game.currentPlayerId].diceLeft));
+            game.rolledDice = diceArrToObj(rollDice(players[game.currentPlayerId].diceLeft));
 
-            io.emit('diceRolled', rolledDice, game.currentPlayerId);
+            io.emit('diceRolled', game.rolledDice, game.currentPlayerId);
         }
     });
     socket.on("placeDice", function(value) {
 
         if(socket.id == game.currentPlayerId)
         {   
-            var diceNbr = rolledDice[value];
+            var diceNbr = game.rolledDice[value];
             players[game.currentPlayerId].diceLeft -= diceNbr;
             casinos[value].dice[players[game.currentPlayerId].color] += diceNbr;
+            game.rolledDice = {};
             nextPlayer();
 
             if(game.currentPlayerInt == -1)
@@ -328,7 +345,10 @@ io.on('connection', function (socket) {
                 if(game.round < 3)
                     io.emit('roundFinished', casinos, players);
                 else
+                {
                     io.emit('gameOver', casinos, players);
+                    resetGame()
+                }
             } else {
                 io.emit('nextTurn', casinos, game.currentPlayerId, players, game.round);
             }
@@ -338,7 +358,35 @@ io.on('connection', function (socket) {
         initRound();
         nextPlayer();
         io.emit('nextTurn', casinos, game.currentPlayerId, players, game.round);
-        console.log("start next round");
+    });
+    socket.on("registerNew", function(previousSocketId) {
+        if(previousSocketId in players && game.gameStarted)
+        {
+            // the player was already registered
+            Object.defineProperty(players, socket.id,
+                Object.getOwnPropertyDescriptor(players, previousSocketId));
+            delete players[previousSocketId];
+            colors[players[socket.id].color] = socket.id;
+
+            if(game.currentPlayerId == previousSocketId)
+            {
+                // it's the player's turn
+                game.currentPlayerId = socket.id;
+                if(Object.keys(game.rolledDice).length > 0)
+                {
+                    // the player has already selected the dice
+                    socket.emit('nextTurn', casinos, game.currentPlayerId, players, game.round);
+                    socket.emit('diceRolled', game.rolledDice, game.currentPlayerId);
+                } else {
+                    socket.emit('nextTurn', casinos, game.currentPlayerId, players, game.round);
+                }
+            } else {
+                socket.emit('nextTurn', casinos, game.currentPlayerId, players, game.round);
+            }
+
+        } else {
+            // We should not accept this player
+        }
     });
 });
 
