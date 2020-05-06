@@ -138,7 +138,7 @@ function getScores() {
             var value = casinos.c.dice.col;
             if(value > 0)
             {
-                if[ecid[value] == ""] // no-one has taken the spot yet!
+                if(ecid[value] == "") // no-one has taken the spot yet!
                     ecid[value] = col;
                 else // it's a tie: no-one wins
                     ecid[value] == "tie";
