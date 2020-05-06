@@ -141,13 +141,14 @@ $(function () {
     socket.emit('startGame');
   });
 
-  socket.on('nextTurn', function(casinos, currentPlayerId, players){
+  socket.on('nextTurn', function(casinos, currentPlayerId, players, round){
     m_casinos = casinos;
     m_players = players;
     updateCasinos(casinos);
     updatePlayers(players);
     $('#startRow').hide();
     $('.showAfterStart').show();
+    $('#roundNumber').text(`Round ${round} / 3`);
 
     $('#messageToWait').text(`Waiting for ${m_players[currentPlayerId].name} to play...`)
     $('#rolledDice').hide();
