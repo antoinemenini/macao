@@ -43,13 +43,13 @@
                   <input type="text" class="form-control" id="inputName2">
                 </div>
                 <div class="col-sm-5.5">
-                  <button type="submit" class="btn btn-primary">Save name</button>
+                  <button type="submit" class="btn btn-secondary">Save name</button>
                 </div>
               </div>
             </form>
 
             <div class="align-middle">  
-              <button type="button" class="btn btn-primary" id="startGameButton"><i class="fas fa-play"></i> Start Game</button>
+              <button type="button" class="btn btn-secondary" id="startGameButton"><i class="fas fa-play"></i> Start Game</button>
               Wait for every player before starting the game.
             </div>
             
@@ -57,21 +57,26 @@
         </div>
 
         <div class="row align-middle showAfterStart" style="display: none;">  
-          <button type="button" class="btn btn-primary" id="rollDice"><i class="fas fa-play"></i> Roll the dice</button>
+          <button type="button" class="btn btn-secondary" id="rollDice"><i class="fas fa-play"></i> Roll the dice</button>
           <p id="messageToWait"></p>
           <div id="rolledDice"></div>
         </div>
 
-        <div class="row" id="roundOver" style="display: none;">
+        <div id="roundOver" style="display: none;">
           <h1>Round over!</h1>
-          <button type="button" class="btn btn-primary" id="startNextRound"><i class="fas fa-play"></i> Start next round</button>
+          <div>
+            <button type="button" class="btn btn-secondary" id="startNextRound"><i class="fas fa-play"></i> Start next round</button>
+          </div>
         </div>
+
+        <div id="gameOver" style="display: none;">
+          <h1>Game Over!</h1>
+        </div>
+
+        <table class="table" id="tableScore" style="display: none;"></table>
 
         <div class="row showAfterStart" id="casinosRow" style="display: none;">
         </div>
-
-
-
 
       </div>
       <div class="col-lg-3 col-sm-12">
