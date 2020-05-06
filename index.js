@@ -133,9 +133,10 @@ function getScores() {
         /* ecid[nbr] will contain the color that has put nbr dice,
         If two colors have put the same number of dices, we do not put anything (it's a tie)
         */
+
         var ecid = ["", "", "", "", "", "", "", "", ""];
-        for (col in casinos.c.dice) {
-            var value = casinos.c.dice.col;
+        for (col in casinos[c].dice) {
+            var value = casinos[c].dice[col];
             if(value > 0)
             {
                 if(ecid[value] == "") // no-one has taken the spot yet!
@@ -149,10 +150,11 @@ function getScores() {
         ecid = ecid.filter(elt => elt != "tie"); // remove ties
         ecid.reverse();
 
-        ecid = ecid.slice(0, casinos.c.bills.length());
-        for(var i=0; i<ecid.length(); i++)
+        ecid = ecid.slice(0, casinos[c].bills.length);
+
+        for(var i=0; i<ecid.length; i++)
         {
-            scores[ecid[i]] += casinos.c.bills[i];
+            scores[ecid[i]] += casinos[c].bills[i];
         }
     }
 
@@ -234,8 +236,6 @@ app.get('/', function (req, res) {
 });
 
 io.on('connection', function (socket) {
-    console.log('a new player connected');
-
     var playerColor; 
 
     var n_players = Object.keys(players).length;
@@ -268,7 +268,6 @@ io.on('connection', function (socket) {
 
     // when a player disconnects, remove them from our players object
     socket.on('disconnect', function (){
-        console.log('user disconnected');
         if (socket.id in players)
         {
             colors[players[socket.id].color] = "";
@@ -279,7 +278,6 @@ io.on('connection', function (socket) {
         io.emit('playersUpdate', players);
     });
     socket.on('setName', function(name) {
-        console.log("set name: "+name);
         players[socket.id].name = name;
         io.emit('playersUpdate', players);
     });
@@ -294,18 +292,19 @@ io.on('connection', function (socket) {
         if(socket.id == game.currentPlayerId)
         {
             rolledDice = diceArrToObj(rollDice(players[game.currentPlayerId].diceLeft));
-            console.log(rolledDice);
+
             io.emit('diceRolled', rolledDice, game.currentPlayerId);
         }
     });
     socket.on("placeDice", function(value) {
-        console.log("Place dice "+value);
+
         if(socket.id == game.currentPlayerId)
         {   
             var diceNbr = rolledDice[value];
             players[game.currentPlayerId].diceLeft -= diceNbr;
             casinos[value].dice[players[game.currentPlayerId].color] += diceNbr;
             nextPlayer();
+
             if(game.currentPlayerInt == -1)
             {
                 getScores();
@@ -318,7 +317,6 @@ io.on('connection', function (socket) {
 });
 
 server.listen(3000, function () {
-    console.log('Example app listening on port 3000!')
 })
 
 
