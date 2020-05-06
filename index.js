@@ -120,8 +120,44 @@ function nextPlayer() {
 }
 
 function getScores() {
+
+    var scores = {
+        red: 0,
+        blue: 0,
+        yellow: 0,
+        green: 0,
+        black: 0
+    }
+
+    for (var c in casinos) {
+        /* ecid[nbr] will contain the color that has put nbr dice,
+        If two colors have put the same number of dices, we do not put anything (it's a tie)
+        */
+        var ecid = ["", "", "", "", "", "", "", "", ""];
+        for (col in casinos.c.dice) {
+            var value = casinos.c.dice.col;
+            if(value > 0)
+            {
+                if(ecid[value] == "") // no-one has taken the spot yet!
+                    ecid[value] = col;
+                else // it's a tie: no-one wins
+                    ecid[value] == "tie";
+            }
+        }
+
+        ecid = ecid.filter(elt => elt != ""); // remove empty elements
+        ecid = ecid.filter(elt => elt != "tie"); // remove ties
+        ecid.reverse();
+
+        ecid = ecid.slice(0, casinos.c.bills.length());
+        for(var i=0; i<ecid.length(); i++)
+        {
+            scores[ecid[i]] += casinos.c.bills[i];
+        }
+    }
+
     for (var p in players) {
-        players[p].scores.push(getRandomInt(100));
+        players[p].scores.push(scores[players[p].color]);
     }
 }
 
