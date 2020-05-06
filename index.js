@@ -198,9 +198,10 @@ function initRound() {
 
 
     game.rollDice = {};
-    game.round++;
     game.currentPlayerId = "";
-    game.currentPlayerInt = -1;
+    var n_players = Object.keys(players).length;
+    game.round++;
+    game.currentPlayerInt = game.round % n_players;
 }
 
 function rollDice(nbr)
@@ -324,7 +325,10 @@ io.on('connection', function (socket) {
             if(game.currentPlayerInt == -1)
             {
                 getScores();
-                io.emit('roundFinished', casinos, players);
+                if(game.round < 3)
+                    io.emit('roundFinished', casinos, players);
+                else
+                    io.emit('gameOver', casinos, players);
             } else {
                 io.emit('nextTurn', casinos, game.currentPlayerId, players, game.round);
             }
