@@ -183,6 +183,10 @@ $(function () {
     socket.emit('rollDice');
   });
 
+  $("#startNextRound").click(function(event){
+    socket.emit('startNextRound');
+  });
+
   chooseDice = function(dice){
     socket.emit('placeDice', dice);
   }

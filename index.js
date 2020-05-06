@@ -12,7 +12,8 @@ var game = {
     gameStarted: false,
     currentPlayerInt: -1,
     currentPlayerId: "",
-    rolledDice: {}
+    rolledDice: {},
+    round: 0
 }
 
 
@@ -112,7 +113,7 @@ function nextPlayer() {
         if(turnFinished)
         {
             game.currentPlayerInt = -1;
-            game.currentPlayerId = 0;
+            game.currentPlayerId = "";
         } else {
             nextPlayer();
         }
@@ -142,7 +143,7 @@ function getScores() {
                 if(ecid[value] == "") // no-one has taken the spot yet!
                     ecid[value] = col;
                 else // it's a tie: no-one wins
-                    ecid[value] == "tie";
+                    ecid[value] = "tie";
             }
         }
 
@@ -167,13 +168,14 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-function initCasinos() {
+function initRound() {
     bills = [60, 60, 60, 60, 60, 70, 70, 70, 70, 70, 80, 80, 80, 80, 80, 90, 90, 90, 90, 90,
     10, 10, 10, 10, 10, 10, 40, 40, 40, 40, 40, 40, 50, 50, 50, 50, 50, 50,
     20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 30];
 
     for (var c in casinos) {
         var totalValue = 0;
+        casinos[c]["bills"] = [];
         while(totalValue < 50)
         {
             var i = getRandomInt(bills.length);
@@ -183,7 +185,22 @@ function initCasinos() {
             casinos[c]["bills"].push(v);
         }
         casinos[c]["bills"].sort().reverse();
+        for (col in casinos[c]["dice"])
+        {
+            casinos[c]["dice"][col] = 0;
+        }
     }
+
+    for (var p in players)
+    {
+        players[p].diceLeft = 8;
+    }
+
+
+    game.rollDice = {};
+    game.round++;
+    game.currentPlayerId = "";
+    game.currentPlayerInt = -1;
 }
 
 function rollDice(nbr)
@@ -283,10 +300,9 @@ io.on('connection', function (socket) {
     });
     socket.on('startGame', function() {
         game.gameStarted = true;
+        initRound();
         nextPlayer();
-        initCasinos();
-        io.emit('gameStarted', casinos);
-        io.emit('nextTurn', casinos, game.currentPlayerId, players);
+        io.emit('nextTurn', casinos, game.currentPlayerId, players, game.round);
     });
     socket.on('rollDice', function() {
         if(socket.id == game.currentPlayerId)
@@ -310,9 +326,15 @@ io.on('connection', function (socket) {
                 getScores();
                 io.emit('roundFinished', casinos, players);
             } else {
-                io.emit('nextTurn', casinos, game.currentPlayerId, players);
+                io.emit('nextTurn', casinos, game.currentPlayerId, players, game.round);
             }
         }
+    });
+    socket.on("startNextRound", function() {
+        initRound();
+        nextPlayer();
+        io.emit('nextTurn', casinos, game.currentPlayerId, players, game.round);
+        console.log("start next round");
     });
 });
 
