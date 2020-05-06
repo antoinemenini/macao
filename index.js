@@ -212,7 +212,7 @@ function resetGame()
     }
     initRound();
     game.round = 0;
-    game.started = false;
+    game.gameStarted = false;
 }
 
 function rollDice(nbr)
