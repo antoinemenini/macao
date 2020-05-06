@@ -153,6 +153,22 @@ $(function () {
     }
   });
 
+  socket.on('roundFinished', function(casinos, players){
+    m_casinos = casinos;
+    m_players = players;
+    
+    updateCasinos(casinos);
+    updatePlayers(players);
+
+    $('#startRow').hide();
+    $('.showAfterStart').show();
+
+    $('#rolledDice').hide();
+    $('#messageToWait').hide();
+    $('#rollDice').hide();
+  });
+
+
   $("#rollDice").click(function(event){
     socket.emit('rollDice');
   });
@@ -176,6 +192,7 @@ $(function () {
       strv += `</a><span class="mr-4"></span>`;
     }
     $("#rolledDice").append(strv);
+
     $('#rolledDice').show();
   });
   
