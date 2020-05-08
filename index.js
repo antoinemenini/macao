@@ -218,10 +218,11 @@ function initRound() {
 function resetGame()
 {
     playersTurn = [];
-    for(var p in players)
+    players = {};
+    /*for(var p in players)
     {
         players[p].scores = [];
-    }
+    }*/
     initRound();
     game.round = 0;
     game.gameStarted = false;
