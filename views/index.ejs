@@ -33,6 +33,12 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-9 col-sm-12">
+
+        <div id="cannotJoin" style="display: none;">
+          <h1>You cannot join the game!</h1>
+          <div class="alert alert-danger" role="alert">The game has already started or the maximum number of players has been reached.</div>
+        </div>
+
         <div class="row" id="startRow">
           <div class="col-sm-12">
             
@@ -78,6 +84,11 @@
         <div class="row showAfterStart" id="casinosRow" style="display: none;">
         </div>
 
+<% if("admin" in context.req.query && context.req.query.admin == "true"){ %>
+        <div class="row" id="adminPanel">
+          <button type="button" class="btn btn-danger" id="resetGame"><i class="fas fa-redo"></i> Reset game</button>
+        </div>
+<% } %>
       </div>
       <div class="col-lg-3 col-sm-12">
         <h4 id="roundNumber"></h4>

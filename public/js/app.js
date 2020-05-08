@@ -170,6 +170,10 @@ $(function () {
     socket.emit('startGame');
   });
 
+  $("#resetGame").click(function(event){
+    socket.emit('resetGame');
+  });
+
   socket.on('nextTurn', function(casinos, currentPlayerId, players, round){
     Cookies.set('id', socket.id, { expires: 1 });
     m_casinos = casinos;
@@ -180,7 +184,7 @@ $(function () {
     $('.showAfterStart').show();
     $('#roundNumber').text(`Round ${round} / 3`);
 
-    $('#messageToWait').text(`Waiting for ${m_players[currentPlayerId].name} to play...`)
+    $('#messageToWait').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Waiting for ${m_players[currentPlayerId].name} to play...`)
     $('#rolledDice').hide();
     $('#roundOver').hide();
     $("#tableScore").hide();
@@ -261,6 +265,29 @@ $(function () {
     $('#roundOver').hide();
     $('#gameOver').show();
     $("#tableScore").show();
+  });
+
+  socket.on('gameReset', function(players){
+    m_players = players;
+    updatePlayers(players);
+
+    $('#startRow').show();
+    $('.showAfterStart').hide();
+
+    $('#rolledDice').hide();
+    $('#messageToWait').hide();
+    $('#rollDice').hide();
+    $('#roundOver').hide();
+    $('#gameOver').hide();
+    $("#tableScore").hide();
+  });
+
+  socket.on('cannotJoinGame', function(){
+    $('#cannotJoin').show();
+
+    $('#startRow').hide();
+    $('.showAfterStart').show();
+    $('#rollDice').hide();
   });
 
 

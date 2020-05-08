@@ -22,13 +22,7 @@ var players = {
 
 var playersTurn = [];
 
-var colors = {
-    red: "",
-    blue: "",
-    yellow: "",
-    green: "",
-    black: "",
-};
+var colors;
 
 var casinos = {
     1: {
@@ -98,6 +92,18 @@ var casinos = {
         name: "table 1"
     },
 };
+
+function setColors() {
+    colors = {
+        red: "",
+        blue: "",
+        yellow: "",
+        green: "",
+        black: "",
+    };
+}
+
+setColors();
 
 function nextPlayer() {
     var n_players = playersTurn.length;
@@ -208,6 +214,7 @@ function initRound() {
 
 function resetGame()
 {
+    playersTurn = [];
     for(var p in players)
     {
         players[p].scores = [];
@@ -263,6 +270,8 @@ context = {};
 
 
 app.get('/', function (req, res) {
+    context.req = req;
+    console.log(context.req.query);
     res.render('index', context);
 });
 
@@ -295,6 +304,11 @@ io.on('connection', function (socket) {
 
         io.emit('playersUpdate', players);
         socket.emit('casinosUpdate', casinos);
+    } else {
+        // You cannot join the games
+        socket.emit('playersUpdate', players);
+        socket.emit('casinosUpdate', casinos);
+        socket.emit('cannotJoinGame');
     }
 
     // when a player disconnects, remove them from our players object if the game has not started
@@ -310,12 +324,23 @@ io.on('connection', function (socket) {
             // emit a message to all players to remove this player
             io.emit('playersUpdate', players);
         }  else {
-            console.log("a player has left while the game was started");
+            var srvSockets = io.sockets.sockets;
+            var socketsNbr = Object.keys(srvSockets).length;
+            if(socketsNbr == 0)
+            {
+                resetGame();
+                setColors();
+                players = {};
+            }
         }
     });
     socket.on('setName', function(name) {
         players[socket.id].name = name;
         io.emit('playersUpdate', players);
+    });
+    socket.on('resetGame', function() {
+        resetGame();
+        io.emit("gameReset", players);
     });
     socket.on('startGame', function() {
         // first we add all players to playersTurn
