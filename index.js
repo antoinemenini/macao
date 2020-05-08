@@ -14,11 +14,13 @@ var game = {
     currentPlayerId: "",
     rolledDice: {},
     round: 0
-}
+};
 
 
 var players = {
 };
+
+var playersTurn = [];
 
 var colors = {
     red: "",
@@ -95,12 +97,12 @@ var casinos = {
         },
         name: "table 1"
     },
-}
+};
 
 function nextPlayer() {
-    var n_players = Object.keys(players).length;
+    var n_players = playersTurn.length;
     game.currentPlayerInt = (game.currentPlayerInt + 1) % n_players;
-    game.currentPlayerId = Object.keys(players)[game.currentPlayerInt];
+    game.currentPlayerId = playersTurn[game.currentPlayerInt];
     if(players[game.currentPlayerId].diceLeft == 0)
     {
         var turnFinished = true;
@@ -316,6 +318,11 @@ io.on('connection', function (socket) {
         io.emit('playersUpdate', players);
     });
     socket.on('startGame', function() {
+        // first we add all players to playersTurn
+        for(var p in players)
+        {
+            playersTurn.push(p);
+        }
         game.gameStarted = true;
         initRound();
         nextPlayer();
@@ -365,6 +372,14 @@ io.on('connection', function (socket) {
             // the player was already registered
             Object.defineProperty(players, socket.id,
                 Object.getOwnPropertyDescriptor(players, previousSocketId));
+            for(var j=0; j<playersTurn.length; j++)
+            {
+                if(playersTurn[j] == previousSocketId)
+                {
+                    playersTurn[j] = socket.id;
+                    break;
+                }
+            }
             delete players[previousSocketId];
             colors[players[socket.id].color] = socket.id;
 
