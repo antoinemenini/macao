@@ -219,6 +219,7 @@ function resetGame()
 {
     playersTurn = [];
     players = {};
+    setColors();
     /*for(var p in players)
     {
         players[p].scores = [];
